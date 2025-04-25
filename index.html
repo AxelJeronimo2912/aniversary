@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Principal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #ff6b95;
+            --secondary-color: #7fc8f8;
+            --accent1: #ffafd7;
+            --accent2: #a0c4ff;
+            --light-bg: #fff9fb;
+            --card1: linear-gradient(135deg, #ffcad4 0%, #f3667d 100%);
+            --card2: linear-gradient(135deg, #b8c0ff 0%, #667eea 100%);
+            --card3: linear-gradient(135deg, #ffd6a5 0%, #ff9a76 100%);
+            --card4: linear-gradient(135deg, #a1ffce 0%, #8ecae6 100%);
+            --shadow: 0 10px 25px rgba(255, 107, 149, 0.3);
+            --title-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fff0f5, #ffdbed);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Decoraciones de fondo */
+        body::before {
+            content: '';
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            top: -120px;
+            right: -80px;
+            background: radial-gradient(circle, rgba(255, 175, 215, 0.5) 0%, rgba(255, 175, 215, 0) 70%);
+            z-index: -1;
+            animation: float 15s infinite ease-in-out;
+        }
+        
+        body::after {
+            content: '';
+            position: fixed;
+            width: 250px;
+            height: 250px;
+            bottom: -100px;
+            left: -50px;
+            background: radial-gradient(circle, rgba(160, 196, 255, 0.5) 0%, rgba(160, 196, 255, 0) 70%);
+            z-index: -1;
+            animation: float 18s infinite ease-in-out reverse;
+        }
+        
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, 20px) rotate(5deg); }
+            66% { transform: translate(-20px, 40px) rotate(-5deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+        
+        .page-title {
+            position: absolute;
+            top: 40px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            font-weight: 700;
+            text-shadow: 2px 2px 8px rgba(255, 107, 149, 0.3);
+            animation: fadeInDown 1s ease-out forwards;
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+            width: 100%;
+            max-width: 360px;
+            margin: 80px auto 20px;
+            perspective: 1000px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 20px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.33, 1, 0.68, 1);
+            transform: translateY(40px);
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .card.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1;
+            border-radius: 20px;
+            opacity: 0.9;
+            transition: all 0.5s ease;
+        }
+        
+        .card:nth-child(1)::before { background: var(--card1); }
+        .card:nth-child(2)::before { background: var(--card2); }
+        .card:nth-child(3)::before { background: var(--card3); }
+        .card:nth-child(4)::before { background: var(--card4); }
+        
+        .card::after {
+            content: '';
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            background: rgba(255, 255, 255, 0.3);
+            top: -25%;
+            left: -25%;
+            transform: rotate(35deg) translateX(-150%);
+            transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        
+        .card:active::after {
+            transform: rotate(35deg) translateX(150%);
+        }
+        
+        .card:active {
+            transform: scale(0.95);
+        }
+        
+        .card h2 {
+            color: white;
+            font-size: 1.3rem;
+            font-weight: 600;
+            z-index: 2;
+            position: relative;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+            padding: 0 15px;
+            text-align: center;
+        }
+        
+        /* Iconos para cada tarjeta */
+        .card-icon {
+            position: absolute;
+            right: 15px;
+            font-size: 2rem;
+            color: rgba(255, 255, 255, 0.6);
+            z-index: 1;
+        }
+        
+        .heart-icon::before { content: '❤️'; animation: pulse 2s infinite; }
+        .smile-icon::before { content: '😍'; animation: swing 3s infinite; }
+        .plane-icon::before { content: '✈️'; animation: float-icon 3s infinite; }
+        .photo-icon::before { content: '📸'; animation: jump 2s infinite; }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            width: 100%;
+        }
+        
+        /* Animaciones para los iconos */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes swing {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(10deg); }
+            75% { transform: rotate(-10deg); }
+            100% { transform: rotate(0deg); }
+        }
+        
+        @keyframes float-icon {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+        
+        @keyframes jump {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0); }
+        }
+        
+        /* Animaciones generales */
+        @keyframes fadeInDown {
+            0% { opacity: 0; transform: translateY(-20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes scaleIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        /* Burbujas de fondo */
+        .bubble {
+            position: fixed;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(1px);
+            box-shadow: 0 4px 16px rgba(255, 175, 215, 0.3);
+            z-index: -1;
+        }
+        
+        /* Confeti para cuando se toca una tarjeta */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            z-index: 3;
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        /* Responsive para pantallas más grandes */
+        @media (min-width: 768px) {
+            .container {
+                max-width: 720px;
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 25px;
+            }
+            
+            .card {
+                height: 160px;
+            }
+            
+            .card h2 {
+                font-size: 1.5rem;
+            }
+            
+            .page-title {
+                font-size: 2.5rem;
+                top: 50px;
+            }
+        }
+        .reel-container {
+        text-align: center;
+        margin-top: 40px;
+        animation: fadeIn 1.5s ease;
+    }
+
+    .reel-button {
+        background-color: #ff4e7a;
+        border: none;
+        color: white;
+        padding: 12px 25px;
+        font-size: 18px;
+        border-radius: 30px;
+        cursor: pointer;
+        box-shadow: 0 5px 10px rgba(255, 78, 122, 0.4);
+        transition: transform 0.3s, background-color 0.3s;
+        margin-top: 20px;
+    }
+
+    .reel-button:hover {
+        background-color: #e03e66;
+        transform: scale(1.05);
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    </style>
+</head>
+<body>
+    <h1 class="page-title">Feliz Aniversario Amor de mi vida</h1>
+    
+    <div class="container">
+        <a href="pag1.html" class="card-link">
+            <div class="card" data-color="pink">
+                <h2>Cosas que me gustan de ti</h2>
+                <span class="card-icon heart-icon"></span>
+            </div>
+        </a>
+        <a href="pag2.html" class="card-link">
+            <div class="card" data-color="blue">
+                <h2>Por qué me enamoré de ti</h2>
+                <span class="card-icon smile-icon"></span>
+            </div>
+        </a>
+        <a href="pag3.html" class="card-link">
+            <div class="card" data-color="orange">
+                <h2>Planes juntos</h2>
+                <span class="card-icon plane-icon"></span>
+            </div>
+        </a>
+        <a href="pag4.html" class="card-link">
+            <div class="card" data-color="green">
+                <h2>Fotos de nosotros</h2>
+                <span class="card-icon photo-icon"></span>
+            </div>
+        </a>    
+    
+        <div class="reel-container">
+            <video id="reelVideo" width="300" height="500" style="border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); display: none;" controls>
+                <source src="./videos/No me digas wey   MP3 Por tu amor(360P).mp4" type="video/mp4">
+                Tu navegador no soporta el video.
+            </video>
+            <button class="reel-button" onclick="playReel()">Sorpresa</button>
+        </div>
+        
+    </div>
+   
+    
+
+    <script>
+          function playReel() {
+        const video = document.getElementById('reelVideo');
+        video.style.display = 'block';
+        video.play();
+    }
+        // Función para crear burbujas decorativas de fondo
+        function createBubbles() {
+            const body = document.querySelector('body');
+            const bubbleCount = 10;
+            
+            for (let i = 0; i < bubbleCount; i++) {
+                const size = Math.random() * 80 + 20;
+                const bubble = document.createElement('div');
+                bubble.classList.add('bubble');
+                bubble.style.width = `${size}px`;
+                bubble.style.height = `${size}px`;
+                bubble.style.left = `${Math.random() * 100}vw`;
+                bubble.style.top = `${Math.random() * 100}vh`;
+                bubble.style.animationDelay = `${Math.random() * 5}s`;
+                
+                // Colores aleatorios entre rosa y azul pastel
+                const hue = Math.random() * 50 + 200; // Entre rosa y azul
+                bubble.style.background = `hsla(${hue}, 100%, 85%, 0.2)`;
+                
+                // Animación de flotar
+                bubble.style.animation = `float ${Math.random() * 10 + 10}s infinite ease-in-out`;
+                
+                body.appendChild(bubble);
+            }
+        }
+        
+        // Función para crear efecto de confeti al tocar tarjetas
+        function createConfetti(x, y, color) {
+            const confettiCount = 20;
+            const container = document.querySelector('body');
+            
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                
+                // Forma aleatoria del confeti
+                const shapes = ['circle', 'square', 'triangle'];
+                const shape = shapes[Math.floor(Math.random() * shapes.length)];
+                
+                if (shape === 'circle') {
+                    confetti.style.borderRadius = '50%';
+                } else if (shape === 'triangle') {
+                    confetti.style.width = '0';
+                    confetti.style.height = '0';
+                    confetti.style.borderLeft = '5px solid transparent';
+                    confetti.style.borderRight = '5px solid transparent';
+                    confetti.style.borderBottom = `10px solid ${color}`;
+                    confetti.style.background = 'transparent';
+                }
+                
+                // Colores según la tarjeta
+                confetti.style.backgroundColor = color;
+                
+                // Posición inicial
+                confetti.style.left = `${x}px`;
+                confetti.style.top = `${y}px`;
+                
+                // Animación
+                const animationDuration = Math.random() * 2 + 1;
+                const angle = Math.random() * 360;
+                const distance = Math.random() * 100 + 50;
+                const velocityX = Math.cos(angle * Math.PI / 180) * distance;
+                const velocityY = Math.sin(angle * Math.PI / 180) * distance - 100; // Efecto gravedad
+                
+                confetti.style.animation = `confetti ${animationDuration}s forwards`;
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                
+                // Keyframes de animación personalizados
+                const keyframes = `
+                    @keyframes confetti {
+                        0% { 
+                            transform: translate(0, 0) rotate(0deg); 
+                            opacity: 1; 
+                        }
+                        100% { 
+                            transform: translate(${velocityX}px, ${velocityY}px) rotate(${Math.random() * 720 - 360}deg); 
+                            opacity: 0; 
+                        }
+                    }
+                `;
+                
+                const styleSheet = document.createElement('style');
+                styleSheet.textContent = keyframes;
+                document.head.appendChild(styleSheet);
+                
+                container.appendChild(confetti);
+                
+                // Eliminar el confeti después de la animación
+                setTimeout(() => {
+                    confetti.remove();
+                    styleSheet.remove();
+                }, animationDuration * 1000);
+            }
+        }
+        
+        // Animación de entrada para las tarjetas
+        function animateCards() {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.classList.add('visible');
+                }, 300 + (index * 150));
+            });
+        }
+        
+        // Animación de navegación
+        function setupNavigation() {
+            const cardLinks = document.querySelectorAll('.card-link');
+            const confettiColors = ['#ffafd7', '#a0c4ff', '#ffd6a5', '#a1ffce'];
+            
+            cardLinks.forEach((link, index) => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const destination = this.getAttribute('href');
+                    const rect = this.querySelector('.card').getBoundingClientRect();
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
+                    
+                    // Efecto de confeti al hacer clic
+                    createConfetti(centerX, centerY, confettiColors[index]);
+                    
+                    // Animación de salida
+                    document.body.style.transition = 'opacity 0.5s ease';
+                    document.body.style.opacity = '0';
+                    
+                    // Navegar después de la animación
+                    setTimeout(() => {
+                        window.location.href = destination;
+                    }, 500);
+                });
+            });
+        }
+        
+        // Detectar toques en dispositivos móviles
+        function setupTouchEffects() {
+            const cards = document.querySelectorAll('.card');
+            
+            cards.forEach((card) => {
+                card.addEventListener('touchstart', function() {
+                    this.style.transform = 'scale(0.95)';
+                });
+                
+                card.addEventListener('touchend', function() {
+                    this.style.transform = '';
+                });
+            });
+        }
+        
+        // Iniciar todo cuando el DOM esté listo
+        document.addEventListener("DOMContentLoaded", () => {
+            // Inicialmente oculto para animación
+            document.body.style.opacity = '0';
+            
+            // Crear burbujas decorativas
+            createBubbles();
+            
+            // Configurar navegación
+            setupNavigation();
+            
+            // Efectos táctiles
+            setupTouchEffects();
+            
+            // Aparecer con animación
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 0.8s ease';
+                document.body.style.opacity = '1';
+                
+                // Animar las tarjetas secuencialmente
+                animateCards();
+            }, 100);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Por qué me enamoré de ti</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #e0c3fc, #8ec5fc);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            width: 90%;
+            max-width: 500px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, #9733EE, #DA22FF);
+            padding: 30px 0;
+            position: relative;
+        }
+        
+        h1 {
+            color: white;
+            margin: 0;
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        .hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ffffff' opacity='0.8'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E") no-repeat center center;
+            background-size: contain;
+            opacity: 0;
+            animation: fall linear infinite;
+        }
+        
+        .card-content {
+            padding: 30px;
+            text-align: center;
+        }
+        
+        p {
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 25px;
+            animation: fadeIn 2s ease;
+        }
+        
+        .music-btn {
+            background: linear-gradient(135deg, #9733EE, #DA22FF);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 1em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(218, 34, 255, 0.4);
+        }
+        
+        .music-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(218, 34, 255, 0.5);
+        }
+        
+        .music-btn i {
+            margin-right: 8px;
+        }
+        
+        .music-btn.playing .fa-play {
+            display: none;
+        }
+        
+        .music-btn:not(.playing) .fa-pause {
+            display: none;
+        }
+        
+        .signature {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8em;
+            margin-top: 20px;
+            color: #9733EE;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0);
+            }
+            50% {
+                transform: translateY(-10px) rotate(1deg);
+            }
+            100% {
+                transform: translateY(0) rotate(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) translateX(0) rotate(0deg);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(100vh) translateX(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #DA22FF, 0 0 20px #DA22FF;
+            }
+            to {
+                text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #DA22FF, 0 0 40px #DA22FF;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .card {
+                width: 95%;
+            }
+            h1 {
+                font-size: 2em;
+            }
+            p {
+                font-size: 1em;
+            }
+        }
+        
+        #errorMessage {
+            color: #DA22FF;
+            font-size: 0.8em;
+            margin-top: 5px;
+            display: none;
+        }
+        .back-btn-container {
+    text-align: center;
+    margin-top: 30px;
+}
+
+/* Botón de Volver */
+.back-btn {
+  margin: 40px auto 30px;
+  width: 80%;
+  max-width: 250px;
+  background: linear-gradient(45deg, #8e24aa, #d81b60);
+  border: none;
+  padding: 15px 20px;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(160, 196, 255, 0.4);
+  transition: all 0.3s ease;
+  animation: fadeInUp 1s ease-out 1s forwards;
+  opacity: 0;
+}
+
+.back-btn:active {
+  transform: scale(0.95);
+  box-shadow: 0 2px 10px rgba(18, 24, 41, 0.3);
+}
+
+@keyframes fadeInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="card-header">
+            <h1>Por qué me enamoré de ti</h1>
+            <div class="hearts" id="hearts"></div>
+        </div>
+        <div class="card-content">
+            <p>
+                Bueno, mi amor, esta es una carta virtual. Tal vez sea raro, JAJA, la verdad nunca había hecho esto y es la primera vez que hago algo así, sobre todo una página web completa.
+            </p>
+            <p>
+                Y bueno... ¡Feliz aniversario, mi amor! Ya llevamos 5 meses y para mí han sido los más bonitos. Como te lo dije antes, nunca pensé enamorarme de alguien, y menos de una amiga de Aransa. Pero sí, la verdad es que ya estoy muy enamorado de ti. Todo el día te pienso, siempre estoy viendo si me contestas; por eso, a veces me agüito porque estás conectada y no me contestas :(
+            </p>
+            <p>
+                Esto lo estoy escribiendo mientras me dices si ya estoy perdiendo el interés por ti, pero no... ¡Yo TE AMOOOOOOOOOOOOOOOOOOOOO con toda mi alma! Y de verdad, ya no me imagino sin ti. Solo quiero pasar mi vida contigo, quiero cumplir todos nuestros planes.
+            </p>
+            <p>
+                ¡Te amoooooo muchoooooo! Y nunca lo olvides ni lo dudes, ¿okey?
+            </p>
+
+            <!-- Botón para reproducir música -->
+            <button class="music-btn" id="musicBtn">
+                <i class="fas fa-play music-icon"></i>
+                Reproducir música
+            </button>
+            <div id="errorMessage" style="display:none; color:red; margin-top:10px;">
+                No se pudo cargar el archivo de música
+            </div>
+
+            <div class="signature">Con todo mi amor...</div>
+        </div>
+        <div class="back-btn-container">
+            <button class="back-btn" onclick="window.location.href='index.html'">Volver</button>
+        </div>
+    </div>
+
+ 
+    <script>
+        // Crear corazones animados
+        const heartsContainer = document.getElementById('hearts');
+        const totalHearts = 20;
+        
+        for (let i = 0; i < totalHearts; i++) {
+            createHeart();
+        }
+        
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            
+            // Posición aleatoria
+            const startLeft = Math.random() * 100;
+            heart.style.left = startLeft + '%';
+            
+            // Tamaño aleatorio
+            const size = Math.random() * 15 + 10;
+            heart.style.width = size + 'px';
+            heart.style.height = size + 'px';
+            
+            // Velocidad aleatoria
+            const duration = Math.random() * 5 + 3;
+            heart.style.animationDuration = duration + 's';
+            
+            // Retraso aleatorio
+            const delay = Math.random() * 5;
+            heart.style.animationDelay = delay + 's';
+            
+            heartsContainer.appendChild(heart);
+            
+            // Eliminar y recrear corazón cuando termine la animación
+            setTimeout(() => {
+                heart.remove();
+                createHeart();
+            }, (duration + delay) * 1000);
+        }
+        
+        // Música local
+        const musicBtn = document.getElementById('musicBtn');
+        const errorMessage = document.getElementById('errorMessage');
+        let audio = new Audio('./music/Eme MalaFe - La Brabus __ Letra(MP3_160K).mp3'); // Ajusta el nombre del archivo según corresponda
+        audio.loop = true;
+        
+        // Comprobar si el archivo de música está disponible
+        audio.addEventListener('error', function() {
+            errorMessage.style.display = 'block';
+            musicBtn.disabled = true;
+            musicBtn.style.opacity = '0.6';
+            musicBtn.style.cursor = 'not-allowed';
+        });
+        
+        musicBtn.addEventListener('click', () => {
+            if (audio.paused) {
+                // Intentar reproducir y manejar posibles errores
+                audio.play().catch(error => {
+                    console.error('Error al reproducir la música:', error);
+                    errorMessage.style.display = 'block';
+                });
+                musicBtn.classList.add('playing');
+            } else {
+                audio.pause();
+                musicBtn.classList.remove('playing');
+            }
+        });
+        
+        // Efecto de entrada para los párrafos
+        const paragraphs = document.querySelectorAll('p');
+        paragraphs.forEach((p, index) => {
+            p.style.animation = `fadeIn 2s ease ${index * 0.5}s forwards`;
+            p.style.opacity = '0';
+        });
+    </script>
+</body>
+</html>
